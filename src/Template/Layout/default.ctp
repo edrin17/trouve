@@ -14,7 +14,7 @@
  * @var \App\View\AppView $this
  */
 
-$cakeDescription = 'CakePHP: the rapid development php framework';
+$cakeDescription = 'Trouve les objets dans la maison';
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,7 +44,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <div class="top-bar-section">
             <ul class="right">
                 <li><a target="_blank" href="https://book.cakephp.org/3/">Documentation</a></li>
-                <li><a target="_blank" href="https://api.cakephp.org/3.0/">API</a></li>
+                <li><a target="_blank" href="https://api.cakephp.org/3.9/">API</a></li>
             </ul>
         </div>
     </nav>
