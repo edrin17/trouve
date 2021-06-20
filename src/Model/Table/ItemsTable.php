@@ -13,7 +13,7 @@ class ItemsTable extends Table
     public function initialize(array $config)
     {
         parent::initialize($config);
-        //overrides Inflector
-        //$this->setEntityClass('App\Model\Entity\Eleve');
+
+        $this->hasMany('Closures');
     }
 }

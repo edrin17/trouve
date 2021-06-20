@@ -19,21 +19,38 @@ class ItemsManagersController extends AppController
         parent::initialize();
     }
 
-    public function welcome()
+    public function welcome($containerId = null)
     {
-        $items = TableRegistry::getTableLocator()->get('items');
-        $query = $items->find();
-        $this->set(compact('query'));
+        $items = TableRegistry::getTableLocator()->get('items'); //load table $items
+        $items = $items->find(); //build query for table $items
+
+        $this->set(compact('items')); //send data to view
+    }
+
+    //Get immediate children from the selected container
+    //@containerId is the id of the selected container
+    public function display($containerId = null)
+    {
+        //get container's Id
+        //get direct children
+        if ($this->request->is('post')) {
+            $containerId = $this->request->getData();
+            $descendants = TableRegistry::getTableLocator()->get('closures');
+            $children = $descendants->find()
+                ->where([
+                    'ascendants' => $containerId,
+                    'depth' => 1,
+                ])
+                ->contain('Items');
+        }
+
+        $this->set(compact('children'));
     }
 
     public function add()
     {
-        $items = TableRegistry::getTableLocator()->get('Items');
-
-        $entity = $items->newEntity();
-
         if ($this->request->is('post')) {
-            $activite = $items->patchEntity($entity, $this->request->getData());
+            debug($this->request->getData());die;
             if ($items->save($activite)) {
                 $this->Flash->success(__("L'objet a été sauvegardée."));
                 return $this->redirect(['action' => 'index']);
