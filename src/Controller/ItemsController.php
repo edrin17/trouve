@@ -30,8 +30,8 @@ class ItemsController extends AppController
     public function add($parent_id=null)
     {
         $first = $second = $third = $fourth = null;
-        $parent1_id = $this->request->query('parent1_id'); //get container from request
-        $parentId = $parent1_id;
+        $containerId = $this->request->query('container_id'); //get container from request
+        //$parentId = $parent1_id;
 
 
         $parents1List = $this->getParent1List(); // get lvl1 parent list
@@ -41,9 +41,10 @@ class ItemsController extends AppController
         $item = $this->Items->newEntity();
         if ($this->request->is('post')) {
             $this->save($item);
-            $this->buildClosure($parentId, $item);
+            //debug($item);die;
+            $this->buildClosure($containerId, $item);
         }
-        $this->set(compact('item','parents1List','parent1_id'));
+        $this->set(compact('item','parents1List','containerId'));
     }
 
     protected function save($item)
@@ -57,22 +58,23 @@ class ItemsController extends AppController
         }
     }
 
-    protected function buildClosure($parentId, $item)
+    protected function buildClosure($containerId, $item)
     {
         $table = TableRegistry::getTableLocator()->get('closures');//charge la table closures
-        return ($this->newClosure($parentId, $item));
+        $this->newClosure($item);
         //ajoute un entree parent avec l'id de l'item en enfant
         //ajoute update tous les ascendants du parentd direct avec un nouvel enfant
         //mettre à jour les niveaux de profondeur
     }
 
-    protected function newClosure($parentId, $item)
+    protected function newClosure($item)
     {
         $table = TableRegistry::getTableLocator()->get('closures');
         $closure = $table->newEntity();
         $closure->ascendant = $item->id;
         $closure->descendant = $item->id;
         $closure->depth = 0;
+        //debug($closure);die;
         $table->save($closure);
     }
 

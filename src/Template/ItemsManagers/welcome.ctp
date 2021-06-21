@@ -1,6 +1,12 @@
 <?php
     $this->assign('title',"Gestionnaire d'objets");
 ?>
+<?php echo $this->Html->link('Afficher le contenu',
+    ['controller' => 'Items','action' => 'add',
+        '?'=>['parent_id'=> null]],
+    ['class' => 'button']
+    );
+?>
 <table id ="tableau" class="table">
     <thead>
         <tr>
