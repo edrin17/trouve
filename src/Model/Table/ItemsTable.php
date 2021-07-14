@@ -14,6 +14,30 @@ class ItemsTable extends Table
     {
         parent::initialize($config);
 
-        $this->hasMany('Closures');
+        $this->HasMany('Ascendants',[
+           'className' => 'Items',
+           'foreignKey' => 'ascendant',
+           'propertyName' => 'Ascendant',
+           'binding' => 'id',
+        ]);
+
+        $this->HasMany('Descendants',[
+           'className' => 'Items',
+           'foreignKey' => 'descendant',
+           'propertyName' => 'Descendants',
+           'binding' => 'id',
+       ]);
+    }
+    public function createGlobalContainer()
+    {
+        $items = $this->find();
+        foreach ($items as $item) {
+            $this->delete($item);
+        }
+        $item = $this->newEntity();
+        $item->name = 'Niveau 0';
+        $item->qty = 0;
+        $this->save($item);
+        return ($item->id);
     }
 }
