@@ -21,6 +21,18 @@
         ['class' => 'button']
     );
 ?>
+<br>
+<?php echo $this->Html->link('Stock > ',
+        ['controller' => 'Items','action' => 'index',
+            '?' => ['container_id' => $mainContainerId]],
+    );
+?>
+<?php foreach ($allParents as $parent) {
+    echo $this->Html->link($parent->Ascendant->name .'> ',
+        ['controller' => 'Items','action' => 'index',
+            '?' => ['container_id' => $parent->ascendant]],
+    );
+} ?>
 <table id ="tableau" class="table">
     <thead>
         <tr>

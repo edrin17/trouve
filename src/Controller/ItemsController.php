@@ -25,12 +25,14 @@ class ItemsController extends AppController
         //debug($closures);die;
 
         $container = $closures->getMainContainer(); //try getting main container from database
-        if (is_null($container)) { //if database empty
+        if (is_null($container)) { //if database empty populate and set containerId on the id of the main container
             $this->populate();
             $container = $closures->getMainContainer();
             $containerId = $container->ascendant; //get main container
+            $mainContainerId = $containerId;
         }else {
             $containerId = $container->ascendant; //get main container
+            $mainContainerId = $containerId;
         }
 
         $requestId = $this->request->getQuery('container_id'); //try getting container_id
@@ -46,20 +48,23 @@ class ItemsController extends AppController
         }
         //debug($containerId);
 
-        $items = $closures->getDirectChildren($container->ascendant);
+        $items = $closures->getDirectChildren($containerId);
         if (is_null($items) || $items == []) {
             $this->Flash->success('Le conteneur est vide');
         }
 
-        $grandPa = $closures->getDirectParent($container->ascendant); //try getting $grandPa for "Previous button"
+        $grandPa = $closures->getDirectParent($containerId); //try getting $grandPa for "Previous button"
         if (!is_null($grandPa) || !$grandPa == [] ) {
             $grandPaId = $grandPa->ascendant;
         }else {                                                 //$grandPa is MainContainer
             $grandPaId = $closures->getMainContainer();
             $grandPaId = $container->ascendant; //get main container
         }
-        //debug($grandPa);
-        $this->set(compact('items','containerId','grandPaId'));
+
+        $allParents = $closures->getAllParents($containerId);
+
+        //debug($allParents->toArray());
+        $this->set(compact('items','containerId','grandPaId','allParents', 'mainContainerId'));
         //debug($test);die;
     }
 

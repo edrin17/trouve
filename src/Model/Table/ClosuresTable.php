@@ -87,4 +87,17 @@ class ClosuresTable extends Table
             $this->save($closure);
         }
     }
+
+    public function getAllParents($containerId){
+        $MainContainerId = $this->getMainContainer();
+        $MainContainerId = $MainContainerId->ascendant;
+        $query = $this->find()->where([
+            'descendant' => $containerId,
+            'ascendant <>' => $containerId,
+            'ascendant <>' => $MainContainerId,
+            'level' => 1,
+        ])
+        ->contain(['Ascendant','Descendant']);
+        return ($query);
+    }
 }
